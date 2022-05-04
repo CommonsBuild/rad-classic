@@ -66,31 +66,35 @@ for i, reward_system in enumerate(params["employed_reward_systems"]):
     system_params["results_output_folder"] = params["results_output_folder"]
 
     DISTRIBUTION_NOTEBOOK_FOLDER = "./distribution_tools/" + reward_system + "/"
+    
+    if not os.path.isdir(DISTRIBUTION_NOTEBOOK_FOLDER):
+        print(f'{reward_system} distribution notebook not provided, skip distribution calculation.')
+    else:
 
-    # run all notebooks in the relevant distribution folder
-    for notebook in os.listdir(DISTRIBUTION_NOTEBOOK_FOLDER):
-        # make sure we only use .ipynb files
-        if not (notebook.endswith(".ipynb")):
-            continue
+        # run all notebooks in the relevant distribution folder
+        for notebook in os.listdir(DISTRIBUTION_NOTEBOOK_FOLDER):
+            # make sure we only use .ipynb files
+            if not (notebook.endswith(".ipynb")):
+                continue
 
-        dist_input_path = DISTRIBUTION_NOTEBOOK_FOLDER + notebook
-        dist_output_path = NOTEBOOK_OUTPUT_PATH + "output_" + notebook
+            dist_input_path = DISTRIBUTION_NOTEBOOK_FOLDER + notebook
+            dist_output_path = NOTEBOOK_OUTPUT_PATH + "output_" + notebook
 
-        # print(dist_output_path)
+            # print(dist_output_path)
 
-        pm.execute_notebook(
-            dist_input_path,
-            dist_output_path,
-            parameters=system_params
-        )
+            pm.execute_notebook(
+                dist_input_path,
+                dist_output_path,
+                parameters=system_params
+            )
 
-    # copy generated distribution files to results folder
-    for output_csv in os.listdir():
-        if not (output_csv.endswith(".csv")):
-            continue
-        #print(output_csv)
-        csv_destination = DISTRIBUTION_OUTPUT_PATH + output_csv
-        os.rename(output_csv, csv_destination)
+        # copy generated distribution files to results folder
+        for output_csv in os.listdir():
+            if not (output_csv.endswith(".csv")):
+                continue
+            #print(output_csv)
+            csv_destination = DISTRIBUTION_OUTPUT_PATH + output_csv
+            os.rename(output_csv, csv_destination)
 
     # ====== ANALYSIS =========
 
