@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  rad:
+    container_name: rad
+    image: rad
+    build: 
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: always
